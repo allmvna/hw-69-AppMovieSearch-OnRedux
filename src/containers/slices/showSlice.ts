@@ -3,6 +3,7 @@ import axios from "axios";
 
 
 interface IShowFromAPI {
+    id: number
     name: string;
 }
 
@@ -27,8 +28,10 @@ export const fetchShows = createAsyncThunk(
     'show/fetchShows',
     async (name: string) => {
         const response = await axios.get(`https://api.tvmaze.com/search/shows?q=${name}`);
-
-        return response.data.map((key: IShowResponse) => ({ name: key.show.name }));
+        return response.data.map((key: IShowResponse) => ({
+            id: key.show.id,
+            name: key.show.name
+        }));
     }
 );
 
