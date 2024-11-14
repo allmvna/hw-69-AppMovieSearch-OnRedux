@@ -1,14 +1,16 @@
-import {Box, Card, Container, Typography} from "@mui/material";
+import {Alert, Box, Card, Container, Typography} from "@mui/material";
 import {useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {fetchShowDetails} from "../slices/showDetailsSlice.ts";
 import {useEffect} from "react";
+import Preloader from "../../UI/Preloader/Preloader.tsx";
 
 
 const ShowDetails = () => {
     const { id } = useParams();
     const dispatch = useAppDispatch();
     const showDetails = useAppSelector((state) => state.showDetails.showDetails);
+    const { isLoading, error } = useAppSelector((state) => state.showDetails);
 
     useEffect(() => {
         if (id) dispatch(fetchShowDetails(Number(id)));
@@ -17,6 +19,11 @@ const ShowDetails = () => {
 
     return (
         <>
+            {isLoading ? (
+            <Preloader />
+        ) : error ? (
+            <Alert severity="error">No data. Try again!</Alert>
+        ) : (
             <Container sx={{ mt: 3 }}>
                 {showDetails && (
                     <>
@@ -52,6 +59,7 @@ const ShowDetails = () => {
                     </>
                 )}
             </Container>
+            )}
         </>
     );
 };
